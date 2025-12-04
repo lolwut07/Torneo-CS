@@ -496,8 +496,8 @@
         const newRegistrationBtn = document.getElementById('newRegistrationBtn');
         const submitBtn = document.getElementById('submitBtn');
         
-        // ⚠️ REEMPLAZA ESTA URL CON LA TUYA ⚠️
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCkWuggOMlYkRbco76yccZgH_EVb9hYRg-xSWdtCNJVtXZP-UnlsYlgv20mdQ2PxI/exec';
+        // ⚠️ REEMPLAZA CON TU URL DEL GOOGLE APPS SCRIPT
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyraZzPwAfIVgbPOnssU9KUMkX0ousgq8ON4icRdqG1_k8HjV1Qw_horADEXvTnK1Zt/exec';
         
         // Estado inicial
         teamNameGroup.style.display = 'none';
@@ -533,21 +533,6 @@
             });
         });
         
-        // Validación NIA
-        document.querySelectorAll('.player-nia-input').forEach(input => {
-            input.addEventListener('blur', function() {
-                const value = this.value.trim();
-                if (value && !/^[A-Z0-9]{8,12}$/i.test(value)) {
-                    this.style.borderColor = '#ff5555';
-                    this.parentElement.querySelector('.error').textContent = 'NIA: 8-12 caracteres alfanuméricos';
-                    this.parentElement.querySelector('.error').style.display = 'block';
-                } else if (value) {
-                    this.style.borderColor = '#00aa00';
-                    this.parentElement.querySelector('.error').style.display = 'none';
-                }
-            });
-        });
-        
         // Botón de reset
         resetBtn.addEventListener('click', function() {
             form.reset();
@@ -573,8 +558,8 @@
             });
         }
         
-        // Envío del formulario - MÉTODO CORREGIDO
-        form.addEventListener('submit', async function(e) {
+        // MÉTODO CORREGIDO - Usar iframe oculto
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             if (!validateForm()) {
@@ -586,64 +571,78 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
             
-            try {
-                // Preparar datos
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-                
-                // Enviar usando fetch con CORS
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                // Procesar respuesta
-                const result = await response.json();
-                
-                if (result.success) {
+            // Crear iframe oculto para enviar datos sin problemas de CORS
+            const iframe = document.createElement('iframe');
+            iframe.name = 'hidden-iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            // Crear formulario temporal que se enviará al iframe
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = scriptURL;
+            tempForm.target = 'hidden-iframe';
+            tempForm.style.display = 'none';
+            
+            // Añadir todos los campos del formulario original
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                tempForm.appendChild(input);
+            });
+            
+            // Añadir timestamp
+            const timestampInput = document.createElement('input');
+            timestampInput.type = 'hidden';
+            timestampInput.name = 'timestamp';
+            timestampInput.value = new Date().toISOString();
+            tempForm.appendChild(timestampInput);
+            
+            // Añadir al documento
+            document.body.appendChild(tempForm);
+            
+            // Configurar evento para cuando se cargue el iframe
+            iframe.onload = function() {
+                // Esperar un momento para que se procese
+                setTimeout(function() {
                     // Mostrar éxito
                     loadingMessage.style.display = 'none';
                     form.style.display = 'none';
                     formButtons.style.display = 'none';
                     successMessage.style.display = 'block';
                     window.scrollTo(0, 0);
-                } else {
-                    throw new Error(result.error || 'Error desconocido');
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                loadingMessage.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Inscripción';
-                
-                // Método alternativo (formulario tradicional)
-                try {
-                    console.log('Intentando método alternativo...');
-                    submitAlternativeMethod();
-                } catch (altError) {
-                    alert('Error: ' + error.message + '\n\nPor favor, contacta con los organizadores.');
-                }
-            }
+                    
+                    // Limpiar
+                    document.body.removeChild(iframe);
+                    document.body.removeChild(tempForm);
+                    
+                    console.log('Formulario enviado correctamente');
+                }, 1500);
+            };
+            
+            // Enviar formulario
+            tempForm.submit();
         });
         
         // Validación del formulario
         function validateForm() {
             let isValid = true;
             
+            // Ocultar todos los errores primero
             document.querySelectorAll('.error').forEach(error => {
                 error.style.display = 'none';
             });
             
-            // Validar selección de equipo
+            // Validar si tiene equipo seleccionado
             const hasTeamSelected = document.querySelector('input[name="hasTeam"]:checked');
             if (!hasTeamSelected) {
                 document.getElementById('teamError').style.display = 'block';
                 isValid = false;
             } else {
+                // Validar según la opción seleccionada
                 if (hasTeamSelected.value === 'yes') {
                     // Validar nombre del equipo
                     const teamName = document.getElementById('teamName').value.trim();
@@ -653,7 +652,8 @@
                     }
                     
                     // Validar jugadores
-                    document.querySelectorAll('.player-name-input, .player-nia-input').forEach(input => {
+                    const playerInputs = document.querySelectorAll('.player-name-input, .player-nia-input');
+                    playerInputs.forEach(input => {
                         if (!input.value.trim()) {
                             const errorField = input.classList.contains('player-name-input') 
                                 ? input.parentElement.querySelector('.player-name-error')
@@ -681,40 +681,6 @@
             }
             
             return isValid;
-        }
-        
-        // Método alternativo de envío
-        function submitAlternativeMethod() {
-            const formData = new FormData(form);
-            
-            // Crear formulario oculto
-            const altForm = document.createElement('form');
-            altForm.method = 'POST';
-            altForm.action = scriptURL;
-            altForm.target = '_blank';
-            altForm.style.display = 'none';
-            
-            // Añadir campos
-            formData.forEach((value, key) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                altForm.appendChild(input);
-            });
-            
-            // Añadir al documento y enviar
-            document.body.appendChild(altForm);
-            altForm.submit();
-            
-            // Mostrar mensaje de éxito después de 2 segundos
-            setTimeout(() => {
-                loadingMessage.style.display = 'none';
-                form.style.display = 'none';
-                formButtons.style.display = 'none';
-                successMessage.style.display = 'block';
-                window.scrollTo(0, 0);
-            }, 2000);
         }
     });
 </script>
