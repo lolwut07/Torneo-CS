@@ -265,6 +265,27 @@
             margin-bottom: 15px;
         }
         
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #00ffff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -297,7 +318,7 @@
                 <i class="fas fa-crosshairs"></i>
                 <h1>Torneo Counter-Strike 1.6</h1>
             </div>
-            <p class="subtitle">Inscripción para el torneo de CS 1.6 - Fecha: 15 de Diciembre 2023</p>
+            <p class="subtitle">Inscripción para el torneo de CS 1.6 - Fecha: 22 de Diciembre 2025</p>
         </header>
         
         <form id="tournamentForm">
@@ -338,7 +359,7 @@
             <!-- Sección de información del equipo (solo si tiene equipo) -->
             <div class="form-section team-section" id="teamPlayersSection">
                 <h2><i class="fas fa-id-card"></i> Información de los Jugadores</h2>
-                <p class="small-note">Por favor ingresa el nombre y NIE (Número de Identificación Extranjero) de cada jugador del equipo. Todos los campos son obligatorios.</p>
+                <p class="small-note">Por favor ingresa el nombre y NIA (Número de Identificación de Alumno) de cada jugador del equipo. Todos los campos son obligatorios.</p>
                 
                 <div id="playersContainer">
                     <!-- Jugador 1 -->
@@ -349,8 +370,8 @@
                             <div class="error player-name-error">Por favor ingresa el nombre</div>
                         </div>
                         <div class="player-name">
-                            <input type="text" name="player1NIE" placeholder="NIE del jugador 1" class="player-nie-input">
-                            <div class="error player-nie-error">Por favor ingresa el NIE</div>
+                            <input type="text" name="player1NIA" placeholder="NIA del jugador 1" class="player-nia-input">
+                            <div class="error player-nia-error">Por favor ingresa el NIA</div>
                         </div>
                     </div>
                     
@@ -362,8 +383,8 @@
                             <div class="error player-name-error">Por favor ingresa el nombre</div>
                         </div>
                         <div class="player-name">
-                            <input type="text" name="player2NIE" placeholder="NIE del jugador 2" class="player-nie-input">
-                            <div class="error player-nie-error">Por favor ingresa el NIE</div>
+                            <input type="text" name="player2NIA" placeholder="NIA del jugador 2" class="player-nia-input">
+                            <div class="error player-nia-error">Por favor ingresa el NIA</div>
                         </div>
                     </div>
                     
@@ -375,8 +396,8 @@
                             <div class="error player-name-error">Por favor ingresa el nombre</div>
                         </div>
                         <div class="player-name">
-                            <input type="text" name="player3NIE" placeholder="NIE del jugador 3" class="player-nie-input">
-                            <div class="error player-nie-error">Por favor ingresa el NIE</div>
+                            <input type="text" name="player3NIA" placeholder="NIA del jugador 3" class="player-nia-input">
+                            <div class="error player-nia-error">Por favor ingresa el NIA</div>
                         </div>
                     </div>
                     
@@ -388,8 +409,8 @@
                             <div class="error player-name-error">Por favor ingresa el nombre</div>
                         </div>
                         <div class="player-name">
-                            <input type="text" name="player4NIE" placeholder="NIE del jugador 4" class="player-nie-input">
-                            <div class="error player-nie-error">Por favor ingresa el NIE</div>
+                            <input type="text" name="player4NIA" placeholder="NIA del jugador 4" class="player-nia-input">
+                            <div class="error player-nia-error">Por favor ingresa el NIA</div>
                         </div>
                     </div>
                     
@@ -401,8 +422,8 @@
                             <div class="error player-name-error">Por favor ingresa el nombre</div>
                         </div>
                         <div class="player-name">
-                            <input type="text" name="player5NIE" placeholder="NIE del jugador 5" class="player-nie-input">
-                            <div class="error player-nie-error">Por favor ingresa el NIE</div>
+                            <input type="text" name="player5NIA" placeholder="NIA del jugador 5" class="player-nia-input">
+                            <div class="error player-nia-error">Por favor ingresa el NIA</div>
                         </div>
                     </div>
                 </div>
@@ -417,11 +438,6 @@
                     <input type="email" id="contactEmail" name="contactEmail" placeholder="ejemplo@email.com">
                     <div class="error" id="emailError">Por favor ingresa un correo electrónico válido</div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="contactPhone">Teléfono de contacto (opcional)</label>
-                    <input type="text" id="contactPhone" name="contactPhone" placeholder="+34 600 000 000">
-                </div>
             </div>
             
             <!-- Información adicional -->
@@ -429,9 +445,16 @@
                 <i class="fas fa-info-circle"></i>
                 <div>
                     <p><strong>Información importante:</strong></p>
-                    <p>El torneo se llevará a cabo el 15 de Diciembre de 2023 en nuestro local de gaming. El horario y más detalles serán enviados al correo electrónico proporcionado.</p>
+                    <p>El torneo se llevará a cabo el <strong>22 de Diciembre de 2025</strong> en nuestro local de gaming. El horario y más detalles serán enviados al correo electrónico proporcionado.</p>
                     <p>Para los jugadores que no tengan equipo completo, los organizadores les ayudarán a formar equipos antes del torneo.</p>
+                    <p><strong>Todos los jugadores deben presentar su NIA (Número de Identificación de Alumno) el día del torneo.</strong></p>
                 </div>
+            </div>
+            
+            <!-- Mensaje de carga -->
+            <div class="loading" id="loadingMessage">
+                <div class="spinner"></div>
+                <p>Enviando inscripción...</p>
             </div>
             
             <!-- Mensaje de éxito (oculto inicialmente) -->
@@ -440,11 +463,15 @@
                 <h2>¡Inscripción completada!</h2>
                 <p>Tu inscripción al torneo de Counter-Strike 1.6 ha sido registrada correctamente.</p>
                 <p>Recibirás un correo de confirmación en las próximas 24 horas con más detalles.</p>
+                <p><strong>Fecha del torneo: 22 de Diciembre 2025</strong></p>
                 <p style="margin-top: 15px; font-weight: bold;">¡Buena suerte en el torneo!</p>
+                <button type="button" id="newRegistrationBtn" style="margin-top: 20px; background-color: #0066cc;">
+                    <i class="fas fa-plus"></i> Nueva Inscripción
+                </button>
             </div>
             
             <!-- Botones de acción -->
-            <div class="buttons">
+            <div class="buttons" id="formButtons">
                 <button type="submit" id="submitBtn">
                     <i class="fas fa-paper-plane"></i> Enviar Inscripción
                 </button>
@@ -456,165 +483,260 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('tournamentForm');
-        const hasTeamRadios = document.querySelectorAll('input[name="hasTeam"]');
-        const teamNameGroup = document.getElementById('teamNameGroup');
-        const playerNameGroup = document.getElementById('playerNameGroup');
-        const teamPlayersSection = document.getElementById('teamPlayersSection');
-        const successMessage = document.getElementById('successMessage');
-        const resetBtn = document.getElementById('resetBtn');
-        
-        // URL de tu Google Apps Script (REEMPLAZAR con tu ID real)
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzTUcBCCVW76cJv6NQ_SCRIPT_ID_AQUI/exec';
-        
-        // Estado inicial
-        teamNameGroup.style.display = 'none';
-        playerNameGroup.style.display = 'none';
-        teamPlayersSection.style.display = 'none';
-        
-        // Manejar cambio en la selección de equipo
-        hasTeamRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'yes') {
-                    // Tiene equipo
-                    teamNameGroup.style.display = 'block';
-                    playerNameGroup.style.display = 'none';
-                    teamPlayersSection.style.display = 'block';
-                    
-                    document.getElementById('teamName').required = true;
-                    document.getElementById('playerName').required = false;
-                    
-                    document.querySelectorAll('.player-name-input, .player-nie-input').forEach(input => {
-                        input.required = true;
-                    });
-                } else {
-                    // No tiene equipo
-                    teamNameGroup.style.display = 'none';
-                    playerNameGroup.style.display = 'block';
-                    teamPlayersSection.style.display = 'none';
-                    
-                    document.getElementById('teamName').required = false;
-                    document.getElementById('playerName').required = true;
-                    
-                    document.querySelectorAll('.player-name-input, .player-nie-input').forEach(input => {
-                        input.required = false;
-                    });
-                }
-            });
-        });
-        
-        // Validación en tiempo real para NIE
-        document.querySelectorAll('.player-nie-input').forEach(input => {
-            input.addEventListener('blur', function() {
-                const value = this.value.trim();
-                if (value && !/^[XYZ0-9][0-9]{7}[A-Z]$/i.test(value)) {
-                    this.style.borderColor = '#ff5555';
-                    this.parentElement.querySelector('.error').textContent = 'Formato de NIE no válido';
-                    this.parentElement.querySelector('.error').style.display = 'block';
-                } else if (value) {
-                    this.style.borderColor = '#00aa00';
-                    this.parentElement.querySelector('.error').style.display = 'none';
-                }
-            });
-        });
-        
-        // Botón de reset
-        resetBtn.addEventListener('click', function() {
-            form.reset();
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('tournamentForm');
+            const hasTeamRadios = document.querySelectorAll('input[name="hasTeam"]');
+            const teamNameGroup = document.getElementById('teamNameGroup');
+            const playerNameGroup = document.getElementById('playerNameGroup');
+            const teamPlayersSection = document.getElementById('teamPlayersSection');
+            const successMessage = document.getElementById('successMessage');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const formButtons = document.getElementById('formButtons');
+            const resetBtn = document.getElementById('resetBtn');
+            const newRegistrationBtn = document.getElementById('newRegistrationBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // URL de Google Apps Script (REEMPLAZA con tu ID real)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzCkWuggOMlYkRbco76yccZgH_EVb9hYRg-xSWdtCNJVtXZP-UnlsYlgv20mdQ2PxI/exec';
+            
+            // Estado inicial
             teamNameGroup.style.display = 'none';
             playerNameGroup.style.display = 'none';
             teamPlayersSection.style.display = 'none';
-            successMessage.style.display = 'none';
-            form.style.display = 'block';
             
-            document.querySelectorAll('.error').forEach(error => {
-                error.style.display = 'none';
+            // Manejar cambio en la selección de equipo
+            hasTeamRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'yes') {
+                        // Tiene equipo
+                        teamNameGroup.style.display = 'block';
+                        playerNameGroup.style.display = 'none';
+                        teamPlayersSection.style.display = 'block';
+                        
+                        document.getElementById('teamName').required = true;
+                        document.getElementById('playerName').required = false;
+                        
+                        document.querySelectorAll('.player-name-input, .player-nia-input').forEach(input => {
+                            input.required = true;
+                        });
+                    } else {
+                        // No tiene equipo
+                        teamNameGroup.style.display = 'none';
+                        playerNameGroup.style.display = 'block';
+                        teamPlayersSection.style.display = 'none';
+                        
+                        document.getElementById('teamName').required = false;
+                        document.getElementById('playerName').required = true;
+                        
+                        document.querySelectorAll('.player-name-input, .player-nia-input').forEach(input => {
+                            input.required = false;
+                        });
+                    }
+                });
             });
-        });
-        
-        // SINGLE submit handler
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            let isValid = true;
             
-            // Validar si tiene equipo seleccionado
-            const hasTeamSelected = document.querySelector('input[name="hasTeam"]:checked');
-            if (!hasTeamSelected) {
-                document.getElementById('teamError').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('teamError').style.display = 'none';
+            // Validación en tiempo real para NIA
+            document.querySelectorAll('.player-nia-input').forEach(input => {
+                input.addEventListener('blur', function() {
+                    const value = this.value.trim();
+                    // NIA: números y letras, 8-12 caracteres
+                    if (value && !/^[A-Z0-9]{8,12}$/i.test(value)) {
+                        this.style.borderColor = '#ff5555';
+                        this.parentElement.querySelector('.error').textContent = 'Formato de NIA no válido (8-12 caracteres alfanuméricos)';
+                        this.parentElement.querySelector('.error').style.display = 'block';
+                    } else if (value) {
+                        this.style.borderColor = '#00aa00';
+                        this.parentElement.querySelector('.error').style.display = 'none';
+                    }
+                });
+            });
+            
+            // Botón de reset
+            resetBtn.addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // Botón para nueva inscripción
+            if (newRegistrationBtn) {
+                newRegistrationBtn.addEventListener('click', function() {
+                    resetForm();
+                    successMessage.style.display = 'none';
+                    form.style.display = 'block';
+                    formButtons.style.display = 'flex';
+                });
+            }
+            
+            // Envío del formulario
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
                 
-                if (hasTeamSelected.value === 'yes') {
-                    const teamName = document.getElementById('teamName').value.trim();
-                    if (!teamName) {
-                        document.getElementById('teamNameError').style.display = 'block';
-                        isValid = false;
-                    } else {
-                        document.getElementById('teamNameError').style.display = 'none';
-                    }
-                    
-                    const playerInputs = document.querySelectorAll('.player-name-input, .player-nie-input');
-                    playerInputs.forEach(input => {
-                        if (!input.value.trim()) {
-                            input.parentElement.querySelector('.error').style.display = 'block';
-                            isValid = false;
-                        } else {
-                            input.parentElement.querySelector('.error').style.display = 'none';
-                        }
-                    });
-                } else {
-                    const playerName = document.getElementById('playerName').value.trim();
-                    if (!playerName) {
-                        document.getElementById('playerNameError').style.display = 'block';
-                        isValid = false;
-                    } else {
-                        document.getElementById('playerNameError').style.display = 'none';
-                    }
+                if (!validateForm()) {
+                    return;
                 }
-            }
-            
-            // Validar email
-            const email = document.getElementById('contactEmail').value.trim();
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email || !emailPattern.test(email)) {
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('emailError').style.display = 'none';
-            }
-            
-            // Si es válido, enviar a Google Sheets
-            if (isValid) {
+                
+                // Mostrar loading
+                loadingMessage.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                
                 try {
+                    // Preparar datos
                     const formData = new FormData(form);
-                    const data = Object.fromEntries(formData);
+                    const data = {};
+                    
+                    // Convertir FormData a objeto
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
+                    
+                    // Añadir timestamp
+                    data.timestamp = new Date().toISOString();
                     
                     // Enviar a Google Sheets
                     const response = await fetch(scriptURL, {
                         method: 'POST',
+                        mode: 'no-cors',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                         },
-                        body: new URLSearchParams(data).toString()
+                        body: JSON.stringify(data)
                     });
                     
-                    if (response.ok) {
-                        // Mostrar mensaje de éxito
-                        form.style.display = 'none';
-                        successMessage.style.display = 'block';
-                        window.scrollTo(0, 0);
-                    } else {
-                        alert('Error al enviar. Por favor, inténtalo de nuevo.');
-                    }
+                    // En no-cors mode, asumimos éxito si no hay error de red
+                    loadingMessage.style.display = 'none';
+                    form.style.display = 'none';
+                    formButtons.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    // Desplazar al inicio
+                    window.scrollTo(0, 0);
+                    
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error de conexión. Por favor, verifica tu internet.');
+                    loadingMessage.style.display = 'none';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Inscripción';
+                    
+                    // Intentar método alternativo si el principal falla
+                    try {
+                        await submitAlternativeMethod();
+                    } catch (altError) {
+                        alert('Error al enviar la inscripción. Por favor, intenta de nuevo o contacta con los organizadores.');
+                    }
                 }
+            });
+            
+            // Validación del formulario
+            function validateForm() {
+                let isValid = true;
+                
+                // Ocultar todos los errores primero
+                document.querySelectorAll('.error').forEach(error => {
+                    error.style.display = 'none';
+                });
+                
+                // Validar si tiene equipo seleccionado
+                const hasTeamSelected = document.querySelector('input[name="hasTeam"]:checked');
+                if (!hasTeamSelected) {
+                    document.getElementById('teamError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    // Validar según la opción seleccionada
+                    if (hasTeamSelected.value === 'yes') {
+                        // Validar nombre del equipo
+                        const teamName = document.getElementById('teamName').value.trim();
+                        if (!teamName) {
+                            document.getElementById('teamNameError').style.display = 'block';
+                            isValid = false;
+                        }
+                        
+                        // Validar jugadores
+                        const playerInputs = document.querySelectorAll('.player-name-input, .player-nia-input');
+                        playerInputs.forEach(input => {
+                            if (!input.value.trim()) {
+                                const errorField = input.classList.contains('player-name-input') 
+                                    ? input.parentElement.querySelector('.player-name-error')
+                                    : input.parentElement.querySelector('.player-nia-error');
+                                errorField.style.display = 'block';
+                                isValid = false;
+                            }
+                        });
+                    } else {
+                        // Validar nombre individual
+                        const playerName = document.getElementById('playerName').value.trim();
+                        if (!playerName) {
+                            document.getElementById('playerNameError').style.display = 'block';
+                            isValid = false;
+                        }
+                    }
+                }
+                
+                // Validar email
+                const email = document.getElementById('contactEmail').value.trim();
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailPattern.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            // Método alternativo de envío (formulario tradicional)
+            async function submitAlternativeMethod() {
+                const formData = new FormData(form);
+                
+                // Crear formulario tradicional
+                const altForm = document.createElement('form');
+                altForm.method = 'POST';
+                altForm.action = scriptURL;
+                altForm.style.display = 'none';
+                
+                // Añadir campos
+                formData.forEach((value, key) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    altForm.appendChild(input);
+                });
+                
+                // Añadir timestamp
+                const timestampInput = document.createElement('input');
+                timestampInput.type = 'hidden';
+                timestampInput.name = 'timestamp';
+                timestampInput.value = new Date().toISOString();
+                altForm.appendChild(timestampInput);
+                
+                // Añadir al documento y enviar
+                document.body.appendChild(altForm);
+                altForm.submit();
+            }
+            
+            // Función para resetear el formulario
+            function resetForm() {
+                form.reset();
+                teamNameGroup.style.display = 'none';
+                playerNameGroup.style.display = 'none';
+                teamPlayersSection.style.display = 'none';
+                successMessage.style.display = 'none';
+                loadingMessage.style.display = 'none';
+                form.style.display = 'block';
+                formButtons.style.display = 'flex';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Inscripción';
+                
+                // Ocultar todos los errores
+                document.querySelectorAll('.error').forEach(error => {
+                    error.style.display = 'none';
+                });
+                
+                // Resetear estilos de borde
+                document.querySelectorAll('input').forEach(input => {
+                    input.style.borderColor = '';
+                });
             }
         });
-    });
-</script>
+    </script>
 </body>
 </html>
